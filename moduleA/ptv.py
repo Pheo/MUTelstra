@@ -289,7 +289,6 @@ toggle_data = False
 
 parser.feed(page)
 
-print data_d
 
 
 
