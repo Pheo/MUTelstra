@@ -24,6 +24,12 @@ months = ['january', 'february', 'march', 'april', 'may', 'june', \
           'july', 'august', 'september', 'october', 'november', 'december']
           
 parserToggle = False
+
+data_d = {}
+
+# Data Storage Function
+def store_data(mode, data):
+    data_d[mode] = data
           
 # Housekeeping Function
 def housekeeping(string):
@@ -48,13 +54,14 @@ def mTrain(string):
     #time keys
     time = ['am', 'pm']
 
-    affected_lines = []
+    affected_d = {}
+    affected_d['lines'] = []
 
     words = string.split()
 
     for word in words:
         if word.strip(',').lower() in tLines:
-            affected_lines.append(word.strip(','))
+            affected_d['lines'].append(word.strip(','))
         
         if 'am' in word or 'pm' in word:
             affected_time = word
@@ -63,10 +70,11 @@ def mTrain(string):
             n = string.index(word)
             break
     
+    affected_lines = affected_d['lines']
     # Special Case Processing, double-worded Train Lines.
     if 'Glen' in affected_lines:
         correction = affected_lines.index('Glen')
-        affected_lines[correction] = 'Glen Waverley'
+        affected_lines= 'Glen Waverley'
         affected_lines.remove('Waverley')
     if 'Morang' in affected_lines:
         correction = affected_lines.index('Morang')
@@ -80,11 +88,10 @@ def mTrain(string):
         affected_lines.remove('Racecourse')
         
     # DICTIONARY_TYPE
-    affected_dates = dateHandler(string[n:])
-    
-    print 'Metropolitan Trains'
-    print affected_lines
-    print affected_dates
+    affected_d['dates'] = dateHandler(string[n:])
+
+    # Call store_data 
+    store_data('mTrains', affected_d)
 
 # Tram
 def mTram(string):
@@ -136,9 +143,12 @@ def mTram(string):
     routeDisruption['routes'] = tRoutes_list
     routeDisruption['stops'] = tStops_list
 
-    print 'Metropolitan Trams'
-    print routeDisruption
-    print dateHandler(string[index:])
+    affected_d = {}
+    affected_d['routeDisruption'] = routeDisruption
+    affected_d['time'] = dateHandler(string[index:])
+
+    # Call store_data 
+    store_data('mTrams', affected_d)
                 
     return
 # Buses
@@ -185,10 +195,11 @@ def mBus(string):
 
     disruption_d['time'] = dateHandler(string[index:])
 
-    print 'Metropolitan Buses'
-    print disruption_d
+    # Call store_data 
+    store_data('mBuses', disruption_d)
                     
     return
+
 # Regional Trains
 def rTrain(string):
     return
@@ -237,6 +248,8 @@ class ptvHTMLParser(HTMLParser):
             ptvHTMLParser.toggle_mode = 'MBUS'
         elif data.lower() == 'regional trains':
             ptvHTMLParser.toggle_mode = 'RTRAIN'
+
+        
         
         return
 
@@ -272,12 +285,11 @@ page = page.read()
 
 parser = ptvHTMLParser()
 
-ptvdata = {}
-
 toggle_data = False
 
 parser.feed(page)
 
+print data_d
 
 
 
