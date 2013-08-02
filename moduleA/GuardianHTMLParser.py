@@ -231,10 +231,4 @@ for story in range(1, numStories):
     else:
         newsdict[story]['URL'] = None
 
-####Just to check that it works (Delete afterwards):
-for story in range(1, numStories):
-    print newsdict[story]['title']
-    print newsdict[story]['storyURL']
-    print newsdict[story]['subtitle']
-    print newsdict[story]['URL']
-    print '\n'
+

@@ -2,9 +2,11 @@ from ptv import *
 from victraffic import *
 from weather import *
 from ASX import *
+from GuardianHTMLParser import *
 import sqlite3
  
 conn = sqlite3.connect('environment.db')
+conn.text_factory = str
 cursor = conn.cursor()
 
 # dictionary output of victraffic
@@ -35,6 +37,13 @@ weather_list = []
 for keys in weather_d:
     weather_list.append((keys,weather_d[keys]['Max Temp'],weather_d[keys]['Min Temp'],weather_d[keys]['Forecast']))
 
+# dictionary output of guardianHTMLParser
+news_list = []
+for items in newsdict:
+    news_list.append((str(newsdict[items]['title']),str(newsdict[items]['storyURL']),str(newsdict[items]['subtitle']),str(newsdict[items]['URL'])))
+
+#insert all data into database
+cursor.executemany("INSERT INTO GuardianNews VALUES (?,?,?,?)",news_list)
 cursor.executemany("INSERT INTO VicTraffic VALUES (?,?,?,?,?,?,?,?,?,?,?)",VicTraffic_list)
 cursor.executemany("INSERT INTO ASX VALUES (?,?,?)",ASX_list)
 cursor.executemany("INSERT INTO ptv VALUES (?,?,?,?,?)",ptv_list)    
