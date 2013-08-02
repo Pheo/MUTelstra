@@ -29,6 +29,8 @@ unwantedTitleChars = '&nbsp;'#don't want this in the News titles
 # HTML Parser
 class GuardianHTMLParser(HTMLParser):
    ####### news = {'Name' : '', 'Picture' : ''}
+    articleIsFeature = False #in the HTML, a 'feature' article has a
+                             #different markup layout than non-features.
     attrsType = ''
     #toggle_mode = 0
     parserToggle = False
@@ -37,7 +39,8 @@ class GuardianHTMLParser(HTMLParser):
                             #pictures relevant to the news titles.
     toggle_mode = 'DEFAULT'
 
-    imageThenText = False   # = True when the source contains the image, followed by the text.
+    imageThenText = False   # = True when the source contains the image
+                            #, followed by the text.
                             # = False otherwise.
     h2_text = False
     
@@ -45,8 +48,15 @@ class GuardianHTMLParser(HTMLParser):
                         #entries.
     lastData = ''       #Keeps a record of what the last data entry was for
                         #the title text, so that it can be concatenated.
+    storyNumber = 1
     
     def handle_starttag(self, tag, attrs):
+        global numStories# Needed to modify global copy of numStories
+        global title#######
+        global storyURL
+        global URL#########
+        global trail#######
+
 #        print 'START TAG::::::: ' + tag
         GuardianHTMLParser.sameData = False
         GuardianHTMLParser.lastData = ''
@@ -57,30 +67,58 @@ class GuardianHTMLParser(HTMLParser):
             if attrs[1][0] == 'class':
                 if attrs[1][1] == 'link-text':
                     GuardianHTMLParser.attrsType = 'link-text'
+                    
                     GuardianHTMLParser.parserToggle = True
                     for url in blocked_urls:
                         if url == attrs[1][1]:
                             blocking = True
                             GuardianHTMLParser.parserToggle = False
                             break
+                       # else:
+                       #     storyURL[numStory] = attrs[1][1]
                 elif attrs[1][1] == "media__img trail__img":
                     GuardianHTMLParser.attrsType = 'image'
                     GuardianHTMLParser.showNextImage = True
                     GuardianHTMLParser.parserToggle = True
                     #return
            
-            elif str(attrs[1][1])[-4:] == 'text':#For titles, the last 4 chars of
-                GuardianHTMLParser.parserToggle = True #the second subelement of the
-                GuardianHTMLParser.attrsType = 'link-text'#second element is 'text'        
+            elif str(attrs[1][1])[-4:] == 'text':#For titles, the last 4 chars
+                    #of the second subelement of the second element is 'text'
 
-        if tag == "img":
+                GuardianHTMLParser.parserToggle = True 
+                GuardianHTMLParser.attrsType = 'link-text'
+                if attrs[1][0] == 'data-link-name':
+                    storyURL[numStories] = attrs[0][1]
+
+
+        if tag == 'li':
+            if len(attrs)>0 and len(attrs[0])>1:
+                if attrs[0][1][13:21] == 'featured':
+                    GuardianHTMLParser.articleIsFeature = True
+
+                    numStories = numStories + 1
+                    title[numStories] = None
+                    storyURL[numStories] = None
+                    URL[numStories] = None
+                    trail[numStories] = None
+                elif attrs[0][1][13:22] == 'thumbnail':
+                    GuardianHTMLParser.articleIsFeature = False
+
+                    numStories = numStories + 1
+                    title[numStories] = None
+                    storyURL[numStories] = None
+                    URL[numStories] = None
+                    trail[numStories] = None
+            #print attrs
+        elif tag == "img":
             #print attrs
             if (attrs[0][1] == 'maxed' or \
-            attrs[1][0] == "data-lowsrc"):# and GuardianHTMLParser.parserToggle == True:
-                print 'PICTURE URL: ' + attrs[1][1]#print out the url of the image.
+            attrs[1][0] == "data-lowsrc"):
+
                 GuardianHTMLParser.attrsType = 'image'
                 GuardianHTMLParser.showNextImage = True
                 GuardianHTMLParser.parserToggle = True
+                URL[numStories] = attrs[1][1]
                 #return
         
         elif tag == "div":
@@ -94,8 +132,7 @@ class GuardianHTMLParser(HTMLParser):
         elif tag == 'h2':
             GuardianHTMLParser.h2_text = True
             GuardianHTMLParser.parserToggle = True
-                
-                
+
     #        else:
    #           print attrs
             if not blocking:
@@ -103,7 +140,12 @@ class GuardianHTMLParser(HTMLParser):
         return
 
     def handle_endtag(self, tag):
-
+        
+        global numStories# Needed to modify global copy of numStories
+        global title#######
+        global URL#########
+        global trail#######
+        
         if tag == 'h2':
             GuardianHTMLParser.h2_text = False
         elif tag == 'img':
@@ -117,6 +159,10 @@ class GuardianHTMLParser(HTMLParser):
         return
 
     def handle_data(self, data):
+        global numStories# Needed to modify global copy of numStories
+        global title#######
+        global URL#########
+        global trail#######
         
         if str.strip(data):
             if GuardianHTMLParser.parserToggle == True:
@@ -132,22 +178,27 @@ class GuardianHTMLParser(HTMLParser):
                             if GuardianHTMLParser.sameData == True:
                                 data = GuardianHTMLParser.lastData + data
                             else:
-                                print 'TITLE: ' + data.strip(' \t\n\r').upper()
+                                title[numStories]=data.strip(' \t\n\r').upper()
+                                
                         else:
-                            print 'SubTitle: ' + data.strip(' ')
-
-       #             if GuardianHTMLParser.attrsType == 'image':#This doesn't seem to work...
-       #                 print 'PICTURE URL: ' + data.strip(' ')                       
-               
+                            trail[numStories] = data.strip(' ')
                 else:
                     print 'wat'
             
         
-        GuardianHTMLParser.lastData = data   #in case there's any stuffups with the
-                                        #page's layout
+        GuardianHTMLParser.lastData = data   #in case there's any 
+                                        #stuffups with the page's layout
         return
 
 # Main Module
+title = {}#######
+storyURL = {}#######
+URL = {}#########
+trail = {}#######
+
+
+numStories = 0
+                                      
 page = urllib.urlopen("http://m.guardian.co.uk/australia")
 page = page.read()
 
@@ -156,3 +207,34 @@ parser = GuardianHTMLParser()
 toggle_data = False
 
 parser.feed(page)
+
+newsdict = {}
+
+for story in range(1, numStories):
+    newsdict[story]  ={}
+    if title[story] != None:
+        newsdict[story]['title'] = title[story]
+    else:
+        newsdict[story]['title'] = None
+    if storyURL[story] != None:
+        newsdict[story]['storyURL'] = 'http://www.theguardian.com' + \
+                                      storyURL[story]
+    else:
+        newsdict[story]['storyURL'] = None
+    if trail[story] != None:
+        newsdict[story]['subtitle'] = trail[story]
+    else:
+
+        newsdict[story]['subtitle'] = None
+    if URL[story] != None:
+        newsdict[story]['URL'] = URL[story]
+    else:
+        newsdict[story]['URL'] = None
+
+####Just to check that it works (Delete afterwards):
+for story in range(1, numStories):
+    print newsdict[story]['title']
+    print newsdict[story]['storyURL']
+    print newsdict[story]['subtitle']
+    print newsdict[story]['URL']
+    print '\n'
