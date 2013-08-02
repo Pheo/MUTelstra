@@ -53,6 +53,7 @@ class GuardianHTMLParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         global numStories# Needed to modify global copy of numStories
         global title#######
+        global storyURL
         global URL#########
         global trail#######
 
@@ -66,12 +67,15 @@ class GuardianHTMLParser(HTMLParser):
             if attrs[1][0] == 'class':
                 if attrs[1][1] == 'link-text':
                     GuardianHTMLParser.attrsType = 'link-text'
+                    
                     GuardianHTMLParser.parserToggle = True
                     for url in blocked_urls:
                         if url == attrs[1][1]:
                             blocking = True
                             GuardianHTMLParser.parserToggle = False
                             break
+                       # else:
+                       #     storyURL[numStory] = attrs[1][1]
                 elif attrs[1][1] == "media__img trail__img":
                     GuardianHTMLParser.attrsType = 'image'
                     GuardianHTMLParser.showNextImage = True
@@ -82,7 +86,9 @@ class GuardianHTMLParser(HTMLParser):
                     #of the second subelement of the second element is 'text'
 
                 GuardianHTMLParser.parserToggle = True 
-                GuardianHTMLParser.attrsType = 'link-text'#        
+                GuardianHTMLParser.attrsType = 'link-text'
+                if attrs[1][0] == 'data-link-name':
+                    storyURL[numStories] = attrs[0][1]
 
 
         if tag == 'li':
@@ -92,6 +98,7 @@ class GuardianHTMLParser(HTMLParser):
 
                     numStories = numStories + 1
                     title[numStories] = None
+                    storyURL[numStories] = None
                     URL[numStories] = None
                     trail[numStories] = None
                 elif attrs[0][1][13:22] == 'thumbnail':
@@ -99,6 +106,7 @@ class GuardianHTMLParser(HTMLParser):
 
                     numStories = numStories + 1
                     title[numStories] = None
+                    storyURL[numStories] = None
                     URL[numStories] = None
                     trail[numStories] = None
             #print attrs
@@ -184,8 +192,10 @@ class GuardianHTMLParser(HTMLParser):
 
 # Main Module
 title = {}#######
+storyURL = {}#######
 URL = {}#########
 trail = {}#######
+
 
 numStories = 0
                                       
@@ -207,6 +217,11 @@ for story in range(1, numStories):
         newsdict[story]['title'] = title[story]
     else:
         newsdict[story]['title'] = None
+    if storyURL[story] != None:
+        newsdict[story]['storyURL'] = 'http://www.theguardian.com' + \
+                                      storyURL[story]
+    else:
+        newsdict[story]['storyURL'] = None
     if trail[story] != None:
         newsdict[story]['subtitle'] = trail[story]
     else:
@@ -220,6 +235,7 @@ for story in range(1, numStories):
 ####Just to check that it works (Delete afterwards):
 for story in range(1, numStories):
     print newsdict[story]['title']
+    print newsdict[story]['storyURL']
     print newsdict[story]['subtitle']
     print newsdict[story]['URL']
     print '\n'
