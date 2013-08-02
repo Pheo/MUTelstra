@@ -207,7 +207,6 @@ parser = GuardianHTMLParser()
 toggle_data = False
 
 parser.feed(page)
-print('\n \n \n')
 
 newsdict = {}
 
