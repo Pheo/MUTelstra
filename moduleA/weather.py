@@ -35,6 +35,7 @@ def htmltag_stripper(string):
     return new_string
 
 # Main Module
+weather_d = {}
 for line in lines:
     if tag in line:
         start = line.index("=")
@@ -44,23 +45,22 @@ for line in lines:
         # City Information
         if line_tag == info[0]:
             detail = htmltag_stripper(line1)
-            print "City:" + detail
+            weather_d[detail] = {}
         # Forecast Information
         elif line_tag == info[1]:  
             end = line1.index("<")
-            detail = line1[1:end]
-            print "Forecast:" + detail       
+            detail1 = line1[1:end]
+            weather_d[detail]["Forecast"] = detail1       
         # Max Temp.
         elif line_tag == info[2]:
-            detail = htmltag_stripper(line1)
-            print "Max Temp:" + detail + "C" 
+            detail2 = htmltag_stripper(line1)
+            weather_d[detail]["Max Temp"] = detail2 + "C" 
         # Min Temp.
         elif line_tag == info[3]:
-            detail = htmltag_stripper(line1)
-            print "Min Temp:" + detail + "C" 
-        # Other Cases
-        else:
-            print "<ignore>"
+            detail3 = htmltag_stripper(line1)
+            weather_d[detail]["Min Temp"] = detail3 + "C" 
+
+
             
 
         

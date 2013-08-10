@@ -127,4 +127,3 @@ parser = victrafficHTMLParser()
 
 parser.feed(page)
 
-print dictofdicts # temporarily used to view output
