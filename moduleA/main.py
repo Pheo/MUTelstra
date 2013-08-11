@@ -3,11 +3,20 @@ from victraffic import *
 from weather import *
 from ASX import *
 from GuardianHTMLParser import *
+from twendrHTMLParser import *
 import sqlite3
  
 conn = sqlite3.connect('environment.db')
 conn.text_factory = str
 cursor = conn.cursor()
+
+# remove previous data
+cursor.execute("DELETE FROM GuardianNews")
+cursor.execute("DELETE FROM VicTraffic")
+cursor.execute("DELETE FROM ASX")
+cursor.execute("DELETE FROM ptv")
+cursor.execute("DELETE FROM weather")
+cursor.execute("DELETE FROM TwitterTrend")
 
 # dictionary output of victraffic
 VicTraffic_list = []
@@ -42,12 +51,19 @@ news_list = []
 for items in newsdict:
     news_list.append((str(newsdict[items]['title']),str(newsdict[items]['storyURL']),str(newsdict[items]['subtitle']),str(newsdict[items]['URL'])))
 
+# dictionary output for twendr
+trend_list = []
+for trends in trend_result[0]['trends']:
+        trend_list.append((str(trends['name']),str(trends['query']),str(trends['url']),str(trends['promoted_content']),str(trends['events'])))
+    
+
 #insert all data into database
 cursor.executemany("INSERT INTO GuardianNews VALUES (?,?,?,?)",news_list)
 cursor.executemany("INSERT INTO VicTraffic VALUES (?,?,?,?,?,?,?,?,?,?,?)",VicTraffic_list)
 cursor.executemany("INSERT INTO ASX VALUES (?,?,?)",ASX_list)
 cursor.executemany("INSERT INTO ptv VALUES (?,?,?,?,?)",ptv_list)    
 cursor.executemany("INSERT INTO weather VALUES (?,?,?,?)",weather_list)
+cursor.executemany("INSERT INTO TwitterTrend VALUES (?,?,?,?,?)",trend_list)
 conn.commit()
 conn.close()
 
