@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+    	<title>Digital Signage</title>
+    	<link rel='stylesheet'  href='include/style.css' type='text/css' media='all' />
+
+        <script type='text/javascript' src='include/jquery.js'></script>
+        <script type='text/javascript' src='include/coin-slider.js'></script>
+        <script type='text/javascript' src='include/jscroller-0.4.js'></script>
+        <link rel="stylesheet" href="include/coin-slider-styles.css" type="text/css" />
+    </head>
+	<body>
+		<div align="center">
+			<div id="wrapper">
+				<div id='coin-slider'>
+					<a href="#">
+						<img src="include/image/coca-cola2.jpg" alt="coca-cola" class="adImg" />
+						
+					</a>
+					</a>
+	
+					<a href="#">
+						<img src="include/image/coffee-beans.jpg" alt="coffee" class="adImg"/>
+					</a>
+		
+					<a href="#">
+						<img src="include/image/thelastofuswallpaper.png" alt="The Last of Us" class="adImg" />
+					</a>
+				</div>
+				<div id="bottom">
+					
+				    <div id="scroller_container">
+					<div id="news">
+						<p>Testing 1 2 3Testing 1 2 3Testing 1 2 3Testing 1 2 3Testing 1 2 3</p>
+					</div>
+				    </div>
+					<div id="QRcode">
+					QR CODE HERE
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+		    $(document).ready(function() {
+		        $('#coin-slider').coinslider({
+				width: 1400, // width of slider panel
+				height: 450, // height of slider panel
+				spw: 7, // squares per width
+				sph: 5, // squares per height
+				delay: 3000, // delay between images in ms
+				sDelay: 30, // delay beetwen squares in ms
+				effect: 'random', // random, swirl, rain, straight
+				navigation: false, // prev next and buttons
+				links : false, // show images as links
+				hoverPause: true // pause on hover
+		        });
+		    });
+		     $(document).ready(function(){
+		      	$jScroller.config.refresh = 1;
+		      	// Add Scroller Object
+		      	$jScroller.add("#scroller_container","#news","right",1);
+		
+		      	// Start Autoscroller
+			$jScroller.start();
+	              });
+		</script>
+        </body>
+</html>
