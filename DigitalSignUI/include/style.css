@@ -1,6 +1,7 @@
-body
+html
 {
-
+    width:1680px;
+    height: 1050px;
 }
 #wrapper
 {
@@ -28,16 +29,16 @@ body
 #scroller_container 
 {
     position: relative;
-    width:80%;
+    width:75%;
     height:70px;
     overflow: hidden;
     border:1px solid teal;
     float:left;
-    margin-top: 3%;
+    margin-top: 6%;
 }
 
 #news {
-    margin-top:-6%;
+    margin-top:-5%;
     white-space: nowrap;
     line-height: 60px;
     font-size: 60px;
@@ -49,8 +50,8 @@ body
 
 #QRcode
 {
-    width:15%;
-    height:150px;
+    width:20%;
+    height:270px;
     border:1px solid teal;
     border-radius: 5px;
     float:right;
