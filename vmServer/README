@@ -1,4 +1,8 @@
-Django M2M server.
+Django M2M server to be loaded on the VM
 
-Start with:
+1. Dependencies:
+Extract and do "python setup.py install" for each archive in Dependencies
+
+2. Usage
+At command line:
 $ sudo python ./manage.py runfcgi host=127.0.0.1 port=8080
