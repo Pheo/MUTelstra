@@ -7,5 +7,5 @@ b. nginx config file in Dependencies to be placed in /etc/nginx/sites-available
 2. Usage
 At command line:
 $ sudo python ./manage.py runfcgi host=127.0.0.1 port=8080
-To restart server...
+To restart server (make sure do it in same dir)
 $ sh restart.sh
