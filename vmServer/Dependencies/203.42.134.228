@@ -6,9 +6,6 @@ server {
 	access_log /var/log/nginx/203.42.134.221.access.log;
 	error_log /var/log/nginx/203.42.134.221.error.log;
 
-     	root /usr/share/nginx/www;
-        index index.html index.htm;
-
 	location /static/ { # STATIC_URL
 		# STATIC_ROOT
 		alias /usr/share/nginx/www/static/;

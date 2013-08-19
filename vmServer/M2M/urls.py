@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'M2M.views.home', name='home'),
     # url(r'^M2M/', include('M2M.foo.urls')),
 
-
+    # Ads
     url(r'^$', include('ads.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
