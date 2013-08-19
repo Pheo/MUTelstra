@@ -1,7 +1,8 @@
 Django M2M server to be loaded on the VM
 
 1. Dependencies:
-Extract and do "python setup.py install" for each archive in Dependencies
+a. Extract and do "python setup.py install" for each archive in Dependencies
+b. nginx config file in Dependencies to be placed in /etc/nginx/sites-available
 
 2. Usage
 At command line:
