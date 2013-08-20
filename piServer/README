@@ -2,8 +2,11 @@ piServer is to be loaded on the Raspberry Pi
 
 QR.py 
 1. Dependencies
-Extract and do "python setup.py install" for each
-archive in the Dependencies Folder
+Extract and do "python setup.py install" for the following
+archives in the Dependencies Folder:
+	a. Imaging
+	b. rqcode
+	c. six
 2. Usage
 To be used as an importable module
 >>> from QR import generate_qrcode
