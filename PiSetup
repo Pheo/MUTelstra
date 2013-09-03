@@ -1,7 +1,8 @@
-12345678901234567890123456789012345678901234567890123456789012345678901234567890
+DESCRIPTION
 Setting up system for digital signage. This documentation assumes a Raspbian OS 
-has been installed and any necessary localisation [Eg. changing keyboards to US]
-has been performed.
+has been installed and any necessary localisation [Eg. changing keyboard layout]
+has been performed. It also assumes that there will be a connection to the
+internet via a Telstra Bigpond 4G/NextG USB modem [Sierra Wireless modem].
 
 1. Create a directory for the digital signage software.
 
@@ -17,8 +18,8 @@ has been performed.
         pi@raspberrypi ~/MUTelstra $ git clone https://github.com/renlord/MUTelstra
 
 3. Modify the startup script so that the NextG modem will be powered on and
-   connected when the Pi is turned on. The NextG modem is to be plugged into
-   any available USB port on the Raspberry Pi.
+   connected when the RaspberryPi is turned on. The NextG modem is to be
+   plugged into any available USB port on the Raspberry Pi.
     (a) Open the file using your preferred editor. [nano is used here]
 
             pi@raspberrypi ~ $ sudo nano /etc/rc.local
@@ -58,7 +59,20 @@ has been performed.
 
         Remarks: --kiosk     makes the browser full screen
                  --incognito helps suppress any error messages from not closing
-                             properly
+                             properly. Eg. restore tabs will not be displayed.
 
 5. Make the RaspberryPi boot up to desktop on startup. Go to raspi-config and
    navigate the menus and select the relevant option.
+
+        pi@raspberrypi ~ $ sudo raspi-config
+
+6. Restart the RaspberryPi to let the settings take effect. The system should
+   boot up and show the digital signage screen.
+
+        pi@raspberrypi ~ $ sudo shutdown -r now
+
+AUTHOR
+    Yun Sheng Chin, for Team UoM-Telstra M2M University Challenge: September 2013
+
+FUTURE ENHANCEMENTS
+    This is to be made into an executable that can be run during first startup.
