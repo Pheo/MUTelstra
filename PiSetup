@@ -1,0 +1,64 @@
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+Setting up system for digital signage. This documentation assumes a Raspbian OS 
+has been installed and any necessary localisation [Eg. changing keyboards to US]
+has been performed.
+
+1. Create a directory for the digital signage software.
+
+    pi@raspberrypi ~ $ mkdir MUTelstra
+
+2. Download the software for the digital signage from GitHub.
+    (a) Go into the directory that was just created in (1).
+
+        pi@raspberrypi ~ $ cd MUTelstra
+
+    (b) Clone the GitHub respository.
+
+        pi@raspberrypi ~/MUTelstra $ git clone https://github.com/renlord/MUTelstra
+
+3. Modify the startup script so that the NextG modem will be powered on and
+   connected when the Pi is turned on. The NextG modem is to be plugged into
+   any available USB port on the Raspberry Pi.
+    (a) Open the file using your preferred editor. [nano is used here]
+
+            pi@raspberrypi ~ $ sudo nano /etc/rc.local
+
+    (b) Add the following line to the file anywhere before 'exit 0'. Please note
+        that 'exit 0' has to be the last line of the file for the system to boot
+        up correctly.
+
+            python  /home/pi/MUTelstra/NextGmodem.py
+
+4. Modify the list of programs that will be started when the desktop environment
+   is started.
+    (a) Open the file using your preferred editor.
+
+            pi@raspberrypi ~ $ sudo nano /etc/xdg/lxsession/LXDE/autostart
+
+    (b) Suppress unnecessary functionality by adding '#' in front of each line.
+
+            #@lxpanel --profile LXDE
+            #@pcmanfm --desktop --profile LXDE
+
+    (c) To prevent the screen from turning off and going into screensaver mode.
+            (i) Turn off screen saver by adding '#' in front of relevant line.
+
+                    #@xscreensaver -no-splash
+
+            (ii) Add the following lines to prevent the monitor from turing off.
+
+                    @xset s off
+                    @xset -dpms
+                    @xset s noblank
+
+    (d) Add a browser to the list of program that is automatically started. Make
+        the it load the digital signage page on startup. Chromium is recommended.
+
+            @chromium --kiosk --incognito /home/pi/MUTelstra/DigitalSignUI/DigitalSignUI.html
+
+        Remarks: --kiosk     makes the browser full screen
+                 --incognito helps suppress any error messages from not closing
+                             properly
+
+5. Make the RaspberryPi boot up to desktop on startup. Go to raspi-config and
+   navigate the menus and select the relevant option.
