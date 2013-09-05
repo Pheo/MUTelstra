@@ -8,25 +8,25 @@ import urllib
 from HTMLParser import HTMLParser
 
 # Initialise dictionary that can be used to pass data to calling functions
-dictofdicts = {}  # Variable for dictionary of traffic alerts
+dictofdicts = {} # Variable for dictionary of traffic alerts
 
 # HTML Parser
 class victrafficHTMLParser(HTMLParser):
 
     # initialise variables
-    mode = 'DEFAULT'  # variable used for data classification
-    datalevel = 0     # counter to keep track of data level
-    location = ''     # location of traffic alert
-    area = ''         # 2nd-level location for traffic alert (suburb etc)
-    lfrom = ''        # road traffic incident applies from
-    lto = ''          # road traffic incident applies to
-    lnear = ''        # landmark traffic incident is near
-    info1 = ''        # Type of traffic alert
-    info2 = ''        # Additional description of traffic alert
-    info3 = ''        # Further information on traffic alert
-    start = ''        # Date/time traffic alert started
-    updated = ''      # Date/time traffic alert last updated
-    index = 0         # Index for dictionary of traffic alerts
+    mode = 'DEFAULT' # variable used for data classification
+    datalevel = 0 # counter to keep track of data level
+    location = '' # location of traffic alert
+    area = '' # 2nd-level location for traffic alert (suburb etc)
+    lfrom = '' # road traffic incident applies from
+    lto = '' # road traffic incident applies to
+    lnear = '' # landmark traffic incident is near
+    info1 = '' # Type of traffic alert
+    info2 = '' # Additional description of traffic alert
+    info3 = '' # Further information on traffic alert
+    start = '' # Date/time traffic alert started
+    updated = '' # Date/time traffic alert last updated
+    index = 0 # Index for dictionary of traffic alerts
 
     def handle_starttag(self, tag, attrs):
         if tag == "li": # tag that indicates start of useful data
@@ -126,4 +126,3 @@ page = page.read()
 parser = victrafficHTMLParser()
 
 parser.feed(page)
-
