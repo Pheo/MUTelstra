@@ -19,7 +19,8 @@ def authenticate(request):
 			and uniq_id == auth.uniq_id:
 				# Check if Pi is in use
 				if auth.in_use == False:
-					return HttpResponse("OK!")
+					return HttpResponse('<meta http-equiv="refresh" content="2; url=http://203.42.134.228/">\
+						Successfully signed into sign! Redirecting now.')
 				else:
 					return HttpResponse("Sign is currently in use. Please try again later.")
 	# Fallback respone
