@@ -1,3 +1,9 @@
+# UoM Telstra M2M Challenge
+# HMTL Information Extractor
+# for use with VicRoads-VicTraffic Website
+# by Chin Wai Ng
+################################################################################
+
 from ptv import *
 from victraffic import *
 from weather import *

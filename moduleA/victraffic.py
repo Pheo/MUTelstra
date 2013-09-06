@@ -41,10 +41,11 @@ class victrafficHTMLParser(HTMLParser):
                 victrafficHTMLParser.mode = 'EMERGENCY'
             else:
                 victrafficHTMLParser.mode = 'DEFAULT'
-
+            
     def handle_data(self, data):
         if ("=" in data): #to remove nonsense data
             return
+
         elif str.strip(data): #to remove whitespace
 
             #print data #temporary output for debugging purposes

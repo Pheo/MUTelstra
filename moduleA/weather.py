@@ -1,66 +1,72 @@
+# -*- coding: utf-8 -*-
+# weather.py
+# Designed to work with OpenWeatherMap API
+# Data belongs to OpenWeatherMap Organisation
+# http://www.OpenWeatherMap.org
+#
+# written by R. Yang
 ###############################################################################
-# UoM M2M Challenge
-# HTML Information Extracter
-# For use with http://www.weather.com.au
-# Renlord Y.
-###############################################################################
-
-# Libraries
 import urllib
+import json
+import sys
+from geocoding import geocoding
 
-# Key Variables
-site = "http://www.weather.com.au"
-info = ["city", "forecast", "max", "min"]
-
-# HTML Tag Keywords
-tag = "td class"
-
-wpage = urllib.urlopen(site)
-lines = wpage.readlines()
-
-# Useful Functions
-def htmltag_stripper(string):
-    while("<" in string or ">" in string):
-        start = string.index("<")
-        end = string.index(">")
-        if(start < end):
-            if(start != 0):
-                new_string = string[:start]
-                break
-            else:
-                string = string[end+1:]
-        else:
-            string = string[1:]
-            
-    return new_string
-
-# Main Module
-weather_d = {}
-for line in lines:
-    if tag in line:
-        start = line.index("=")
-        end = line.index(">")
-        line_tag = line[start+2:end-1]
-        line1 = line[end:]
-        # City Information
-        if line_tag == info[0]:
-            detail = htmltag_stripper(line1)
-            weather_d[detail] = {}
-        # Forecast Information
-        elif line_tag == info[1]:  
-            end = line1.index("<")
-            detail1 = line1[1:end]
-            weather_d[detail]["Forecast"] = detail1       
-        # Max Temp.
-        elif line_tag == info[2]:
-            detail2 = htmltag_stripper(line1)
-            weather_d[detail]["Max Temp"] = detail2 + "C" 
-        # Min Temp.
-        elif line_tag == info[3]:
-            detail3 = htmltag_stripper(line1)
-            weather_d[detail]["Min Temp"] = detail3 + "C" 
+def getWeatherGPS(lat, lng):
+	'gets weather based on GPS coordinates of a location'
+	url = \
+	'http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}'.format(lat, lng)
+	decoder = json.JSONDecoder()
+	json_object = urllib.urlopen(url).read()
+	weather, param_list = processWeatherDetails(json_object)
+	return weather, param_list
 
 
-            
+def getWeatherLocation(address):
+	'gets weather based on the address of the location'
+	lat, lng = geocoding(address)
+	lat = float('%.2f' %lat)
+	lng = float('%.2f' %lng)
+	weather, param_list = getWeatherGPS(lat, lng)
+	return weather, param_list
 
-        
+def processWeatherDetails(json_object):
+	'process the JSON object from the API'
+	param_list = ['temp', 'cond', 'wind', 'humidity']
+	weather_conds = [u'Mist', u'Clouds', u'Clear', u'Rain']
+	decoder = json.JSONDecoder()
+	# In the event there's no json_object. Returns false
+	try:
+		weather = decoder.decode(json_object)
+	except ValueError:
+		sys.exit()
+
+	weather1 = weather[u'weather'][0]
+	weather2 = weather[u'main']
+	weather3 = weather[u'wind']
+	weather_d = {}
+	weather_d['temp'] = KtoC(int(weather2[u'temp']))
+	weather_d['cond'] = getCondEnum(weather1[u'main'])
+
+	weather_d['wind'] = float(weather3[u'speed'])
+	weather_d['humidity'] = int(weather2[u'humidity'])
+	return weather_d, param_list
+
+def updateWeather():
+	return
+
+def KtoC(kelvin):
+	return (kelvin - 273)
+
+def getCondEnum(cond):
+	weather_conds = [u'Mist', u'Clouds', u'Clear', u'Rain']
+	enum_l = [u'Mist', u'Clouds', u'Clear', u'Rain', u'Other']
+
+	if cond not in weather_conds:
+		return enum_l.index(u'Other')
+	else:
+		return enum_l.index(cond)
+
+def main():
+	return
+
+
