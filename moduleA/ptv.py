@@ -25,11 +25,11 @@ months = ['january', 'february', 'march', 'april', 'may', 'june', \
           
 parserToggle = False
 
-data_d = {}
+data_d = {'MTRAIN':[],'MTRAM':[],'MBUS':[]}
 
 # Data Storage Function
 def store_data(mode, data):
-    data_d[mode] = data
+    data_d[mode].append(data)
           
 # Housekeeping Function
 def housekeeping(string):
@@ -186,14 +186,13 @@ def mBus(string):
         
         if ':' in words[i]:
             index = i
+            disruption_d['time'] = dateHandler(string[index:])
 
     disruption_d['routes'] = bRoutes_list
 
     for word in keywords:
         if word in words:
             disruption_d['disruption_type'] = word
-
-    disruption_d['time'] = dateHandler(string[index:])
 
     # Call store_data 
     store_data('MBUS', disruption_d)
@@ -288,7 +287,6 @@ parser = ptvHTMLParser()
 toggle_data = False
 
 parser.feed(page)
-
 
 
 
