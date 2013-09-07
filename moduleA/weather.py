@@ -11,6 +11,8 @@ import json
 import sys
 from geocoding import geocoding
 
+APIkey = '3bd5c94e9cb2db2c267b0d78623ccd1b'
+
 def getWeatherGPS(lat, lng):
 	'gets weather based on GPS coordinates of a location'
 	url = \
@@ -20,7 +22,6 @@ def getWeatherGPS(lat, lng):
 	weather, param_list = processWeatherDetails(json_object)
 	return weather, param_list
 
-
 def getWeatherLocation(address):
 	'gets weather based on the address of the location'
 	lat, lng = geocoding(address)
@@ -28,6 +29,20 @@ def getWeatherLocation(address):
 	lng = float('%.2f' %lng)
 	weather, param_list = getWeatherGPS(lat, lng)
 	return weather, param_list
+
+def getWeatherID(cityID):
+    'gets weather based on the city id'
+
+    return weather, param_list,
+
+def createLocationID(cityID, param=None):
+    'creates a database entry with CityID for a location.'
+    if type(param) = tuple:
+        
+        
+    if type(param) = str:
+        
+    return
 
 def processWeatherDetails(json_object):
 	'process the JSON object from the API'
