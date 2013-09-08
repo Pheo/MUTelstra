@@ -32,7 +32,11 @@ def getWeatherLocation(address):
 
 def getWeatherID(cityID):
     'gets weather based on the city id'
-
+    url = \
+    'http://api.openweathermap.org/data/2.5/weather?id={}'.format(cityID)
+    decoder = json.JSONDecoder()
+    json_object = urllib.urlopen(url).read()
+    weather, param_list = processWeatherDetails(json_object)
     return weather, param_list
 
 def createLocationID(cityID, param=None):
