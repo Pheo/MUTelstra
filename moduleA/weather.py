@@ -37,12 +37,20 @@ def getWeatherGPS(lat, lng):
         lat, lng, APIkey)
     decoder = json.JSONDecoder()
     json_object = urllib.urlopen(url).read()
+    db, cur = connectDB()
+    query = "SELECT LocID FROM ads_location WHERE\
+		 GPS_Lat = %s AND GPS_Long = %s" %(lat, lng)
+	has_city = cur.execute(query)
+	if has_city:
+		weather, param_list = getWeatherID(cityID)
+	else:
+    	cityID = getCityID(json_object) #put this into DB
+    	weather, param_list = processWeatherDetails(json_object)
+		query = "INSERT INTO ads_location SET CityID=%d, GPS_Lat=%f, GPS_Long=%f" %(cityID, lat, lng)
     # query if there's a CityID with this Lat, Lng
         #if there is:
         # weather, param_list = getWeatherID(cityID)
     # else
-    cityID = getCityID(json_object) #put this into DB
-    weather, param_list = processWeatherDetails(json_object)
     return weather, param_list
 
 def getWeatherLocation(address):
