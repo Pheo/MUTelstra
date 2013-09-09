@@ -3,7 +3,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
 class Advertisment(models.Model):
-	AdID	= models.IntegerField(primary_key=True)
+	AdID	= models.AutoField(primary_key=True)
 	Name	= models.CharField(max_length=256)
 	Path	= models.CharField(max_length=256)
 	InDate	= models.DateTimeField('Date of Insertion')
@@ -13,6 +13,10 @@ class Advertisment(models.Model):
 	DCond	= models.IntegerField(choices=CHOICES_Cond)
 	DWind	= models.FloatField()
 	DHumidity = models.IntegerField()
+	DTime	= models.TimeField()
+	BidAmt	= models.FloatField()
+	MaxBdgt	= models.FloatField()
+	RelVar	= models.IntegerField()
 	Rel	= models.IntegerField(default=0)
 
 	def __unicode__(self):
@@ -26,23 +30,6 @@ class Authentication(models.Model):
 	def __unicode__(self):
 		return self.pi_name
 
-class Disruption(models.Model):
-	DisruptID	= models.IntegerField(primary_key=True)
-	CHOICES_Service	= ((0,'TRAM'),(1,'BUS'),(2,'TRAIN'))
-	Service		= models.IntegerField(choices=CHOICES_Service)
-	Route		= models.IntegerField()
-	CHOICES_Duration= ((0,'CONTINUOUS'),(1,'DISCRETE'),(2,'INDEFINITE'))
-	Duration	= models.IntegerField(choices=CHOICES_Duration) 
-	CHOICES_Disrupt	= ((0,'RELOCATION'),(1,'DIVERSION'),(2,'CLOSURE'))
-	Disrupt		= models.IntegerField(choices=CHOICES_Disrupt)
-
-class ServiceLocation(models.Model):
-	SerLocID	= models.IntegerField(primary_key=True)
-	CHOICES_Service = ((0,'TRAM'),(1,'BUS'),(2,'TRAIN'))
-	ServiceType	= models.IntegerField(choices=CHOICES_Service)
-	Route		= models.IntegerField()
-	Location	= models.CharField(max_length=256)
-
 class Weather(models.Model):
 	LocID		= models.IntegerField(primary_key=True)
 	Temp		= models.IntegerField()
@@ -52,10 +39,7 @@ class Weather(models.Model):
 	Humidity	= models.IntegerField()
 
 class Location(models.Model):
-	LocID	= models.IntegerField(primary_key=True)
-	Name	= models.CharField(max_length=256)
+	LocID	= models.AutoField(primary_key=True)
+	CityID	= models.IntegerField()
 	GPS_Lat = models.FloatField()
 	GPS_Long= models.FloatField()
-
-	def __unicode__(self):
-		return self.Name

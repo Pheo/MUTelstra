@@ -32,17 +32,33 @@ def closeDB(db, cur):
 
 def getWeatherGPS(lat, lng):
     'gets weather based on GPS coordinates of a location'
-    url = \
-    'http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&APPID={}'.format(
-        lat, lng, APIkey)
+    url = 'http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&APPID={}'.\
+        format(lat, lng, APIkey)
     decoder = json.JSONDecoder()
     json_object = urllib.urlopen(url).read()
+    db, cur = connectDB()
+    query = "SELECT CityID FROM ads_location WHERE GPS_Lat = %s AND GPS_Long = %s" %(lat, lng)
+    has_city = cur.execute(query)
+    if has_city > 0:
+        for e in cur:
+            print e[0]
+            CityID = e[0]
+            weather, param_list = getWeatherID(CityID)
+    else:
+        # Handle Cases where Long,Lat does not exist
+        try:
+            CityID = getCityID(json_object) #put this into DB
+        except:
+            exit("Location Not Found")
+        weather, param_list = processWeatherDetails(json_object)
+        query = "INSERT INTO ads_location SET CityID=%d, GPS_Lat=%f,\
+             GPS_Long=%f" %(CityID, lat, lng)
+        cur.execute(query)
     # query if there's a CityID with this Lat, Lng
         #if there is:
         # weather, param_list = getWeatherID(cityID)
     # else
-    cityID = getCityID(json_object) #put this into DB
-    weather, param_list = processWeatherDetails(json_object)
+    closeDB(db, cur)
     return weather, param_list
 
 def getWeatherLocation(address):
