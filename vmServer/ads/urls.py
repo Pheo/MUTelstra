@@ -7,5 +7,7 @@ urlpatterns = patterns ('',
 	url(r'^$', views.index, name='index'),
 	url(r'^(?P<ad_id>\d+)/$', views.display, name='display'),	
 	url(r'^authenticate/$', 
-		views.authenticate, name='authenticate')
+		views.authenticate, name='authenticate'),
+	url(r'^session/$',
+		views.session, name='session')
 )
