@@ -15,10 +15,16 @@ class Advertisment(models.Model):
 	DHumidity = models.IntegerField()
 	Rel	= models.IntegerField(default=0)
 
+	def __unicode__(self):
+		return self.Name
+
 class Authentication(models.Model):
 	pi_name	= models.CharField(max_length=100,primary_key=True)
 	in_use	= models.BooleanField(default=False)
 	uniq_id	= models.CharField(max_length=100)
+
+	def __unicode__(self):
+		return self.pi_name
 
 class Disruption(models.Model):
 	DisruptID	= models.IntegerField(primary_key=True)
@@ -47,6 +53,9 @@ class Weather(models.Model):
 
 class Location(models.Model):
 	LocID	= models.IntegerField(primary_key=True)
+	Name	= models.CharField(max_length=256)
 	GPS_Lat = models.FloatField()
 	GPS_Long= models.FloatField()
-	Name	= models.CharField(max_length=256)
+
+	def __unicode__(self):
+		return self.Name

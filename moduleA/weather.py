@@ -9,6 +9,7 @@
 import urllib
 import json
 import sys
+import MySQLdb
 from geocoding import geocoding
 
 APIkey = '3bd5c94e9cb2db2c267b0d78623ccd1b'
@@ -16,7 +17,8 @@ APIkey = '3bd5c94e9cb2db2c267b0d78623ccd1b'
 def getWeatherGPS(lat, lng):
     'gets weather based on GPS coordinates of a location'
     url = \
-    'http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}'.format(lat, lng)
+    'http://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&APPID={}'.format(
+        lat, lng, APIkey)
     decoder = json.JSONDecoder()
     json_object = urllib.urlopen(url).read()
     weather, param_list = processWeatherDetails(json_object)
@@ -33,7 +35,8 @@ def getWeatherLocation(address):
 def getWeatherID(cityID):
     'gets weather based on the city id'
     url = \
-    'http://api.openweathermap.org/data/2.5/weather?id={}'.format(cityID)
+    'http://api.openweathermap.org/data/2.5/weather?id={}&APPID={}'.format(cityID, 
+        APIkey)
     decoder = json.JSONDecoder()
     json_object = urllib.urlopen(url).read()
     weather, param_list = processWeatherDetails(json_object)
@@ -41,7 +44,7 @@ def getWeatherID(cityID):
 
 def createLocationID(cityID, param=None):
     'creates a database entry with CityID for a location.'
-
+    
     return
 
 def processWeatherDetails(json_object):
