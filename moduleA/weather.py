@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#-*- coding: utf-8 -*-
 # weather.py
 # Designed to work with OpenWeatherMap API
 # Data belongs to OpenWeatherMap Organisation
@@ -13,6 +13,22 @@ import MySQLdb
 from geocoding import geocoding
 
 APIkey = '3bd5c94e9cb2db2c267b0d78623ccd1b'
+hostdet = "localhost"
+userdet = "renlord"
+passwddet = "renlord"
+dbdet = "ids" 
+
+def connectDB():
+    'connects to the database in the Virtual Machine'
+    db = MySQLdb.connect(host=hostdet,user=userdet,passwd=passwddet,db=dbdet)
+    cur = db.cursor()
+    return db, cur
+
+def closeDB(db, cur):
+    'closes and commits all changes to the DB'
+    cur.close()
+    db.commit()
+    db.close()
 
 def getWeatherGPS(lat, lng):
     'gets weather based on GPS coordinates of a location'
@@ -21,6 +37,11 @@ def getWeatherGPS(lat, lng):
         lat, lng, APIkey)
     decoder = json.JSONDecoder()
     json_object = urllib.urlopen(url).read()
+    # query if there's a CityID with this Lat, Lng
+        #if there is:
+        # weather, param_list = getWeatherID(cityID)
+    # else
+    cityID = getCityID(json_object) #put this into DB
     weather, param_list = processWeatherDetails(json_object)
     return weather, param_list
 
@@ -42,10 +63,11 @@ def getWeatherID(cityID):
     weather, param_list = processWeatherDetails(json_object)
     return weather, param_list
 
-def createLocationID(cityID, param=None):
-    'creates a database entry with CityID for a location.'
-    
-    return
+def getCityID(json_object):
+    'extracts City ID from the json object'
+    decoder = json.JSONDecoder()
+    data = decoder.decode(json_object)
+    return data[u'id']
 
 def processWeatherDetails(json_object):
     'process the JSON object from the API'
