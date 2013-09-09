@@ -1,5 +1,6 @@
 # Ad Manager
-#
+# Scheduled to run every 15 minutes
+# Written by Renlord Yang and Jun Min (Pheo)
 
 import sys
 import MySQLdb
@@ -21,10 +22,17 @@ def updateAll():
 			GPS_Lat = f[0]
 			GPS_Long = f[1]
 			Weather, Param_List = getWeatherGPS(GPS_Lat, GPS_Long)
-			query = "UPDATE ads_weather SET Temp = %d, Cond = %d, Wind = %f,\
-				 Humidity = %d WHERE LocID = %d"\
-				 % (Weather['temp'], Weather['cond'], Weather['wind'],\
-					 Weather['humidity'], LocID)
+			# Check for failed Long,Lat case
+			if not ((Weather == False) and (Param_List == False)):
+				query = "UPDATE ads_weather SET Temp = %d, Cond = %d, Wind = %f,\
+					 Humidity = %d WHERE LocID = %d"\
+					 % (Weather['temp'], Weather['cond'], Weather['wind'],\
+						 Weather['humidity'], LocID)
+				cur2.execute(query)
+	db.commit()
+	cur.close()
+	cur2.close()
+	db.close()
 	return
 
 def pushAllSign():

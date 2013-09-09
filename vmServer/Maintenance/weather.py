@@ -48,7 +48,8 @@ def getWeatherGPS(lat, lng):
         try:
             CityID = getCityID(json_object) #put this into DB
         except:
-            exit("Location Not Found")
+	    # No Lang,Lat, return False,False
+            return False, False 
         weather, param_list = processWeatherDetails(json_object)
         query = "INSERT INTO ads_location SET CityID=%d, GPS_Lat=%f,\
              GPS_Long=%f" %(CityID, lat, lng)
