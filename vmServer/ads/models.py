@@ -43,6 +43,3 @@ class Location(models.Model):
 	CityID	= models.IntegerField()
 	GPS_Lat = models.FloatField()
 	GPS_Long= models.FloatField()
-
-	def __unicode__(self):
-		return self.CityID
