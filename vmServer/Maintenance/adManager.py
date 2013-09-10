@@ -23,6 +23,7 @@ def updateAll():
 			GPS_Long = f[1]
 			Weather, Param_List = getWeatherGPS(GPS_Lat, GPS_Long)
 			# Check for failed Long,Lat case
+			print Weather
 			if not ((Weather == False) and (Param_List == False)):
 				query = "UPDATE ads_weather SET Temp = %d, Cond = %d, Wind = %f,\
 					 Humidity = %d WHERE LocID = %d"\
