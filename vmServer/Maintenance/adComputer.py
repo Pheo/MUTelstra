@@ -41,10 +41,10 @@ def getTime():
 	'gets the current time based on system time'
 
 	t = time.ctime()
-	t = time.split()
-	t = time[3]
-	t = time.split(':')
-	t = time[0]
+	t = t.split()
+	t = t[3]
+	t = t(':')
+	t = t[0]
 
 	return t
 
