@@ -40,13 +40,13 @@ def closeDB(db):
 def getTime():
 	'gets the current time based on system time'
 
-	time = time.ctime()
-	time = time.split()
-	time = time[3]
-	time = time.split(':')
-	time = time[0]
+	t = time.ctime()
+	t = time.split()
+	t = time[3]
+	t = time.split(':')
+	t = time[0]
 
-	return time
+	return t
 
 def computeAll():
 	'computes relevance for all the advertisements in ads_advertisment'
@@ -54,7 +54,7 @@ def computeAll():
 	c = db.cursor()
 	c1 = db.cursor()
 
-	time = getTime()
+	t = getTime()
 
 	q = 'SELECT * FROM ads_advertisment'
 	c.execute(q)
