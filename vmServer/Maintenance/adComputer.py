@@ -43,7 +43,7 @@ def getTime():
 	t = time.ctime()
 	t = t.split()
 	t = t[3]
-	t = t(':')
+	t = t.split(':')
 	t = t[0]
 
 	return t
