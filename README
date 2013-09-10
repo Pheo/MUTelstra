@@ -1,8 +1,0 @@
-1. moduleA
-> Responsible for backend data gathering (eg. weather, etc.)
-
-2. piServer
-> To be hosted on the RPi. Communicates with VM.
-
-3. vmServer
-> To be hosted on the VM. Communicated with Pi.
