@@ -15,13 +15,11 @@
 # Data Mining functions that will load data into database
 # Bias estimation for advertisers. Identifies what params advertisers desire 
 ###############################################################################
-
 import sys
 import math
 import datetime
 import time
 import MySQLdb
-
 
 hostdet = "localhost"
 userdet = "renlord"
@@ -38,6 +36,17 @@ def closeDB(db):
     db.commit()
     db.close()
     return
+
+def getTime():
+	'gets the current time based on system time'
+
+	time = time.ctime()
+	time = time.split()
+	time = time[3]
+	time = time.split(':')
+	time = time[0]
+
+	return time
 
 def computeAll():
 	'computes relevance for all the advertisements in ads_advertisment'
@@ -265,17 +274,6 @@ def getSeason():
 
 	return
 
-def getTime():
-	'gets the current time based on system time'
-
-	time = time.ctime()
-	time = time.split()
-	time = time[3]
-	time = time.split(':')
-	time = time[0]
-
-	return time
-
 def getDFactor():
 	'gets the discrimination factor'
 	# in trial
@@ -291,5 +289,14 @@ def mineBias():
 	'mines instances of discrimination for future dFactor adjustments'
 
 	return
+
+
+# MAIN 
+def main():
+	computeAll()
+	updateAll()
+
+if __name__ == '__main__':
+	main()
 
 
